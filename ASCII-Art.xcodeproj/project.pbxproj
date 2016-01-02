@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D79A74B41C36B52200DBA386 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79A74B31C36B52200DBA386 /* main.cpp */; };
+		D79A74BD1C36B54F00DBA386 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79A74BB1C36B54F00DBA386 /* main.cpp */; };
+		D79A74C31C36B5F100DBA386 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79A74C11C36B5F100DBA386 /* image.cpp */; };
+		D79A74C61C36B6C200DBA386 /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = D79A74C41C36B6C200DBA386 /* stb_image.c */; };
+		D7B0C5B11C37912400B73DA5 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5AF1C37912400B73DA5 /* font.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +27,13 @@
 
 /* Begin PBXFileReference section */
 		D79A74B01C36B52200DBA386 /* ASCII-Art */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ASCII-Art"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D79A74B31C36B52200DBA386 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D79A74BB1C36B54F00DBA386 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D79A74C11C36B5F100DBA386 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		D79A74C21C36B5F100DBA386 /* image.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
+		D79A74C41C36B6C200DBA386 /* stb_image.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stb_image.c; sourceTree = "<group>"; };
+		D79A74C51C36B6C200DBA386 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		D7B0C5AF1C37912400B73DA5 /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = font.cpp; sourceTree = "<group>"; };
+		D7B0C5B01C37912400B73DA5 /* font.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = font.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +50,7 @@
 		D79A74A71C36B52200DBA386 = {
 			isa = PBXGroup;
 			children = (
-				D79A74B21C36B52200DBA386 /* ASCII-Art */,
+				D79A74BA1C36B54200DBA386 /* src */,
 				D79A74B11C36B52200DBA386 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,12 +63,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D79A74B21C36B52200DBA386 /* ASCII-Art */ = {
+		D79A74BA1C36B54200DBA386 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				D79A74B31C36B52200DBA386 /* main.cpp */,
+				D79A74C41C36B6C200DBA386 /* stb_image.c */,
+				D79A74C51C36B6C200DBA386 /* stb_image.h */,
+				D79A74BB1C36B54F00DBA386 /* main.cpp */,
+				D79A74C11C36B5F100DBA386 /* image.cpp */,
+				D79A74C21C36B5F100DBA386 /* image.hpp */,
+				D7B0C5AF1C37912400B73DA5 /* font.cpp */,
+				D7B0C5B01C37912400B73DA5 /* font.hpp */,
 			);
-			path = "ASCII-Art";
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +133,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D79A74B41C36B52200DBA386 /* main.cpp in Sources */,
+				D7B0C5B11C37912400B73DA5 /* font.cpp in Sources */,
+				D79A74BD1C36B54F00DBA386 /* main.cpp in Sources */,
+				D79A74C31C36B5F100DBA386 /* image.cpp in Sources */,
+				D79A74C61C36B6C200DBA386 /* stb_image.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +255,7 @@
 				D79A74B91C36B52200DBA386 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
