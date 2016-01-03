@@ -1,34 +1,44 @@
 #include "font.hpp"
 
-#include <cmath>
+#define STBTT_STATIC
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"
 
-Font::Font(const char *fileName, int numX, int numY)
-: m_image(fileName)
-, m_charWidth(m_image.m_width / numX)
-, m_charHeight(m_image.m_height / numY)
+#include <cmath>
+#include <cstdlib>
+
+Font::Font(const char *fileName, float size, int bitmapSize)
 {
-	for (int row = 0; row < numY; row++)
+	stbtt_bakedchar cdata[96];
+	unsigned char ttfBuffer[1<<20];
+	Image fontBuffer(bitmapSize, bitmapSize);
+
+	fread(ttfBuffer, 1, 1 << 20, fopen(fileName, "rb"));
+	stbtt_BakeFontBitmap(ttfBuffer, 0, size, fontBuffer.m_pixels, bitmapSize, bitmapSize, 32, 96, cdata);
+	
+	for (int i = 1; i < 95; i++)
 	{
-		for (int col = 0; col < numX; col++)
-		{
-			Character c;
-			c.x = col * m_charWidth;
-			c.y = row * m_charHeight;
-			c.brightness = m_image.getAverageBrightnessFromSubImage(col * m_charWidth, row * m_charHeight, m_charWidth, m_charHeight);
-			m_characters.push_back(c);
-		}
+		Character c;
+		c.symbol = i + 32;
+		c.x0 = cdata[i].x0;
+		c.x1 = cdata[i].x1;
+		c.y0 = cdata[i].y0;
+		c.y1 = cdata[i].y1;
+		c.brightness = fontBuffer.getAverageBrightnessFromSubImage(c.x0, c.y0, c.x1 - c.x0, c.y1 - c.y0);
+		m_characters[i - 1] = c;
 	}
 }
 
 Character Font::getChar(float brightness) const
 {
-	Character result = m_characters[0];
-	for (auto c : m_characters)
+	brightness = 1.0f - brightness;
+	int result = 0;
+	for (int i = 0; i < 94; i++)
 	{
-		if (fabs(c.brightness - brightness) < fabs(result.brightness - brightness))
+		if (fabs(m_characters[i].brightness - brightness) < fabs(m_characters[result].brightness - brightness))
 		{
-			result = c;
+			result = i;
 		}
 	}
-	return result;
+	return m_characters[result];
 }

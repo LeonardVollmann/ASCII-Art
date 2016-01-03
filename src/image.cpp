@@ -3,11 +3,13 @@
 #include "font.hpp"
 
 #include <cstdlib>
+#include <cstdio>
 #include <deque>
 
 Image::Image(int width, int height)
 : m_width(width)
 , m_height(height)
+, m_brightnessCorrectionBias(1.0f)
 {
 	m_pixels = new unsigned char[width * height];
 }
@@ -18,6 +20,8 @@ Image::Image(const char *fileName)
 	m_pixels = new unsigned char[m_width * m_height];
 	memcpy(m_pixels, result, m_width * m_height * sizeof(unsigned char));
 	stbi_image_free(result);
+	
+	m_brightnessCorrectionBias = 0.5f / getAverageBrightnessFromSubImage(0, 0, m_width, m_height);
 }
 
 Image::~Image()
@@ -25,9 +29,8 @@ Image::~Image()
 	delete m_pixels;
 }
 
-void Image::convertToASCII(int resX, int resY, const Font &font, const char *name)
+void Image::convertToASCII(int resX, int resY, const Font &font, const char *fileName)
 {
-	Image result(font.m_charWidth * resX, font.m_charHeight * resY);
 	const int subImageWidth = m_width / resX;
 	const int subImageHeight = m_height / resY;
 	const int numCols = m_width / subImageWidth;
@@ -38,28 +41,11 @@ void Image::convertToASCII(int resX, int resY, const Font &font, const char *nam
 	{
 		for (int col = 0; col < numCols; col++)
 		{
-			chars.push_back(font.getChar(getAverageBrightnessFromSubImage(col * subImageWidth, row * subImageHeight, subImageWidth, subImageHeight)));
+			printf("%c", font.getChar(m_brightnessCorrectionBias *
+									  getAverageBrightnessFromSubImage(col * subImageWidth, row * subImageHeight, subImageWidth, subImageHeight)).symbol);
 		}
+		printf("\n");
 	}
-	
-	for (int y = 0; y < resY; y++)
-	{
-		for (int x = 0; x < resX; x++)
-		{
-			Character c = chars.front();
-			chars.pop_front();
-			for (int yy = 0; yy < font.m_charHeight; yy++)
-			{
-				for (int xx = 0; xx < font.m_charWidth; xx++)
-				{
-					result.m_pixels[x * font.m_charWidth + xx + (y * font.m_charHeight + yy) * result.m_width] =
-						font.m_image.m_pixels[c.x + xx + (c.y + yy) * font.m_image.m_width];
-				}
-			}
-		}
-	}
-
-	result.writeToPPM(name);
 }
 
 float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int height)
@@ -72,6 +58,7 @@ float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int heigh
 			avg += (float) m_pixels[xx + yy * m_width];
 		}
 	}
+
 	return avg / (width * height * 255.0f);
 }
 

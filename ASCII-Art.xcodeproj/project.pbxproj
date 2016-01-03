@@ -34,6 +34,7 @@
 		D79A74C51C36B6C200DBA386 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		D7B0C5AF1C37912400B73DA5 /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = font.cpp; sourceTree = "<group>"; };
 		D7B0C5B01C37912400B73DA5 /* font.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = font.hpp; sourceTree = "<group>"; };
+		D7B0C5B21C3902F400B73DA5 /* stb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_truetype.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 		D79A74BA1C36B54200DBA386 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D7B0C5B21C3902F400B73DA5 /* stb_truetype.h */,
 				D79A74C41C36B6C200DBA386 /* stb_image.c */,
 				D79A74C51C36B6C200DBA386 /* stb_image.h */,
 				D79A74BB1C36B54F00DBA386 /* main.cpp */,

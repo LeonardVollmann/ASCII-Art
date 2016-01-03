@@ -8,6 +8,7 @@
 struct Character
 {
 	char symbol;
+	int x0, x1, y0, y1;
 	int x;
 	int y;
 	float brightness;
@@ -17,12 +18,12 @@ class Font
 {
 friend class Image;
 private:
-	Image m_image;
-	std::vector<Character> m_characters;
-	int m_charWidth;
-	int m_charHeight;
+	Character m_characters[94];
 public:
-	Font(const char *fileName, int numX, int numY);
+	Font(const char *fileName, float size, int bitmapSize);
+	
+	void readFontInfo(const char *fileName);
+	void writeFontInfo(const char *fileName);
 	
 	Character getChar(float brightness) const;
 };
