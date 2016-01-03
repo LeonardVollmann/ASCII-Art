@@ -23,7 +23,6 @@ private:
 	int m_charHeight;
 public:
 	Font(const char *fileName, int numX, int numY);
-	~Font();
 	
 	Character getChar(float brightness) const;
 };

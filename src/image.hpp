@@ -15,6 +15,9 @@ public:
 	
 	float getAverageBrightnessFromSubImage(int x, int y, int width, int height);
 	void writeToPPM(const char *fileName);
+	
+	inline int getWidth() const { return m_width; }
+	inline int getHeight() const { return m_height; }
 private:
 	int m_width;
 	int m_height;

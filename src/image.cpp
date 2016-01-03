@@ -3,6 +3,7 @@
 #include "font.hpp"
 
 #include <cstdlib>
+#include <deque>
 
 Image::Image(int width, int height)
 : m_width(width)
@@ -27,43 +28,48 @@ Image::~Image()
 void Image::convertToASCII(int resX, int resY, const Font &font, const char *name)
 {
 	Image result(font.m_charWidth * resX, font.m_charHeight * resY);
-	const int numRows = m_height / font.m_charHeight;
-	const int numCols = m_width / font.m_charWidth;
-	const int subImageWidth = m_width / numCols;
-	const int subImageHeight = m_height / numRows;
+	const int subImageWidth = m_width / resX;
+	const int subImageHeight = m_height / resY;
+	const int numCols = m_width / subImageWidth;
+	const int numRows = m_height / subImageHeight;
 	
+	std::deque<Character> chars;
 	for (int row = 0; row < numRows; row++)
 	{
 		for (int col = 0; col < numCols; col++)
 		{
-			Character c = font.getChar(getAverageBrightnessFromSubImage(col * subImageWidth, row * subImageHeight, subImageWidth, subImageHeight));
-			for (int y = 0; y < font.m_charWidth; y++)
+			chars.push_back(font.getChar(getAverageBrightnessFromSubImage(col * subImageWidth, row * subImageHeight, subImageWidth, subImageHeight)));
+		}
+	}
+	
+	for (int y = 0; y < resY; y++)
+	{
+		for (int x = 0; x < resX; x++)
+		{
+			Character c = chars.front();
+			chars.pop_front();
+			for (int yy = 0; yy < font.m_charHeight; yy++)
 			{
-				for (int x = 0; x < font.m_charWidth; x++)
+				for (int xx = 0; xx < font.m_charWidth; xx++)
 				{
-					int i1 = col * font.m_charWidth + x + (row * font.m_charHeight) * result.m_width;
-					int i2 = c.x + x + (c.y + y) * font.m_charWidth;
-					result.m_pixels[i1] =
-						font.m_image.m_pixels[i2];
+					result.m_pixels[x * font.m_charWidth + xx + (y * font.m_charHeight + yy) * result.m_width] =
+						font.m_image.m_pixels[c.x + xx + (c.y + yy) * font.m_image.m_width];
 				}
 			}
 		}
 	}
 
-	char *ppm;
-	strcpy(ppm, name);
-	strcat(ppm, ".ppm");
-	result.writeToPPM(ppm);
+	result.writeToPPM(name);
 }
 
 float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int height)
 {
 	float avg = 0.0f;
-	for (int yy = y;  yy < height; yy++)
+	for (int yy = y;  yy < y + height; yy++)
 	{
-		for (int xx = x; xx < width; xx++)
+		for (int xx = x; xx < x + width; xx++)
 		{
-			avg += (float) m_pixels[x + xx + (y + yy) * m_width];
+			avg += (float) m_pixels[xx + yy * m_width];
 		}
 	}
 	return avg / (width * height * 255.0f);

@@ -20,10 +20,6 @@ Font::Font(const char *fileName, int numX, int numY)
 	}
 }
 
-Font::~Font()
-{
-}
-
 Character Font::getChar(float brightness) const
 {
 	Character result = m_characters[0];
