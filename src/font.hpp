@@ -8,19 +8,21 @@
 struct Character
 {
 	char symbol;
-	int x0, x1, y0, y1;
-	int x;
-	int y;
 	float brightness;
+	int width;
+	int height;
 };
 
 class Font
 {
 friend class Image;
 private:
-	Character m_characters[94];
+	std::vector<Character> m_characters;
+	float m_avgWidth;
+	float m_avgHeight;
 public:
 	Font(const char *fileName, float size, int bitmapSize);
+	Font(const char *fileName);
 	
 	void readFontInfo(const char *fileName);
 	void writeFontInfo(const char *fileName);

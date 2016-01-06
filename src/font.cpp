@@ -19,19 +19,62 @@ Font::Font(const char *fileName, float size, int bitmapSize)
 	for (int i = 1; i < 95; i++)
 	{
 		Character c;
+		c.width = cdata[i].x1 - cdata[i].x0;
+		c.height  = cdata[i].y1 - cdata[i].y0;
 		c.symbol = i + 32;
-		c.x0 = cdata[i].x0;
-		c.x1 = cdata[i].x1;
-		c.y0 = cdata[i].y0;
-		c.y1 = cdata[i].y1;
-		c.brightness = fontBuffer.getAverageBrightnessFromSubImage(c.x0, c.y0, c.x1 - c.x0, c.y1 - c.y0);
-		m_characters[i - 1] = c;
+		c.brightness = fontBuffer.getTotalBrightnessFromSubImage(cdata[i].x0, cdata[i].y0, c.width, c.height);
+		m_characters.push_back(c);
+		
+		m_avgWidth += c.width;
+		m_avgHeight += c.height;
 	}
+	m_avgWidth /= 94.0f;
+	m_avgHeight /= 94.0f;
+	
+	for (Character &c : m_characters)
+	{
+		c.brightness = c.brightness / (m_avgWidth * m_avgHeight);
+	}
+}
+
+Font::Font(const char *fileName)
+{
+	char buffer[1 << 12];
+	fread(buffer, 1, 1 << 12, fopen(fileName, "rb"));
+	
+	char *save_line;
+	char *line = strtok_r(buffer, "\n", &save_line);
+	int i;
+	while (line)
+	{
+		char *save_token;
+		char symbol = *strtok_r(line, " ", &save_token);
+		float brightness = atof(strtok_r(nullptr, " ", &save_token));
+		
+		Character c;
+		c.symbol = symbol;
+		c.brightness = brightness;
+		m_characters.push_back(c);
+		i++;
+		
+		line = strtok_r(nullptr, "\n", &save_line);
+	}
+}
+
+void Font::writeFontInfo(const char *fileName)
+{
+	FILE *f = fopen(fileName, "wb");
+	
+	for (int i = 0; i < 94; i++)
+	{
+		fprintf(f, "%c %f\n", m_characters[i].symbol, m_characters[i].brightness);
+	}
+	
+	fclose(f);
 }
 
 Character Font::getChar(float brightness) const
 {
-	brightness = 1.0f - brightness;
 	int result = 0;
 	for (int i = 0; i < 94; i++)
 	{

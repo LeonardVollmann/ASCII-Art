@@ -13,6 +13,7 @@ public:
 	
 	void convertToASCII(int xRes, int yRes, const Font &font, const char *fileName);
 	
+	float getTotalBrightnessFromSubImage(int x, int y, int width, int height);
 	float getAverageBrightnessFromSubImage(int x, int y, int width, int height);
 	void writeToPPM(const char *fileName);
 	

@@ -21,7 +21,7 @@ Image::Image(const char *fileName)
 	memcpy(m_pixels, result, m_width * m_height * sizeof(unsigned char));
 	stbi_image_free(result);
 	
-	m_brightnessCorrectionBias = 0.5f / getAverageBrightnessFromSubImage(0, 0, m_width, m_height);
+	m_brightnessCorrectionBias = 0.35f / getAverageBrightnessFromSubImage(0, 0, m_width, m_height);
 }
 
 Image::~Image()
@@ -36,19 +36,22 @@ void Image::convertToASCII(int resX, int resY, const Font &font, const char *fil
 	const int numCols = m_width / subImageWidth;
 	const int numRows = m_height / subImageHeight;
 	
+	FILE *f = fopen(fileName, "wb");
+	
 	std::deque<Character> chars;
 	for (int row = 0; row < numRows; row++)
 	{
 		for (int col = 0; col < numCols; col++)
 		{
-			printf("%c", font.getChar(m_brightnessCorrectionBias *
+			fprintf(f, "%c", font.getChar(m_brightnessCorrectionBias *
 									  getAverageBrightnessFromSubImage(col * subImageWidth, row * subImageHeight, subImageWidth, subImageHeight)).symbol);
 		}
-		printf("\n");
+		fprintf(f, "\n");
 	}
+	fclose(f);
 }
 
-float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int height)
+float Image::getTotalBrightnessFromSubImage(int x, int y, int width, int height)
 {
 	float avg = 0.0f;
 	for (int yy = y;  yy < y + height; yy++)
@@ -58,8 +61,13 @@ float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int heigh
 			avg += (float) m_pixels[xx + yy * m_width];
 		}
 	}
+	
+	return avg / 255.0f;
+}
 
-	return avg / (width * height * 255.0f);
+float Image::getAverageBrightnessFromSubImage(int x, int y, int width, int height)
+{
+	return getTotalBrightnessFromSubImage(x, y, width, height) / (width * height);
 }
 
 void Image::writeToPPM(const char *fileName)
