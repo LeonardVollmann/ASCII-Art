@@ -1,5 +1,5 @@
 # ASCII-Art
-Turns images into text files that look like them.
+Creates a text file that looks like a specified image. You can choose the font with which the program makes the calculations.
 
 ## Usage
 - Compile with ./build.sh
